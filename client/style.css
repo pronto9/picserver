@@ -1,0 +1,36 @@
+body {
+	background: #FFFFFF;
+}
+
+.passport-series {
+	background: #FFFFCC;
+}
+
+.passport-number {
+	background: #FFFFCC;
+}
+
+.picture-directory {
+	background: #FFFCCC;
+}
+
+
+
+.galleria { width: auto; height: 600px; background: #000 
+}
+
+
+#fs {
+position: relative;
+top: 30px;
+right: 20px;
+text-align: right;
+color: #ccc;
+font: italic 11px/1 arial,sans-serif;
+z-index: 2;
+cursor:default;
+}
+#fs a:hover,a.fs:active {color:#fff; background: none;}
+
+
+
