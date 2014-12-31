@@ -16,7 +16,7 @@ body {
 
 
 
-.galleria { width: auto; height: 600px; background: #000 
+#galleria { width: auto; height: 600px; background: #000; 
 }
 
 
@@ -34,3 +34,4 @@ cursor:default;
 
 
 
+.hidden {display:none}

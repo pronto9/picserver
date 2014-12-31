@@ -10,6 +10,7 @@ var main = function () {
 	$('body').on('click', 'button#home-button', function() {
 		//alert( $(this).text() );
 		$( ".picture-directory" ).empty();
+		$('#galleria').addClass('hidden');
 		drawCollectionIndexRoot();
 	});
 
@@ -24,10 +25,13 @@ var main = function () {
 		//$( ".picture-directory" ).empty();
 		//drawEventsIndex( $(this).text() );
 		var currentEventName = $(this).text();
-
 		var url = 'getalbum/' + currentCollection + '/' + currentEventName;
 		//alert(url);
 
+		//$('#galleria').addClass('hidden');
+		$('#galleria').removeClass('hidden');
+
+		
 		$.ajax({
 			"url" : url,
 			"type": "GET"
@@ -48,7 +52,7 @@ var main = function () {
 					    transition: 'fade',
 					    dataSource:imagedataSource
 					});
-					Galleria.run('.galleria');
+					Galleria.run('#galleria');
 				}
 			}).fail(function (err) {
 				console.log(err);
@@ -123,7 +127,7 @@ var main = function () {
 					    transition: 'fade',
 					    dataSource:imagedataSource
 					});
-					Galleria.run('.galleria');
+					Galleria.run('#galleria');
 				}
 			}).fail(function (err) {
 				console.log(err);
@@ -135,6 +139,8 @@ var main = function () {
 
 
 	Galleria.loadTheme('lib/galleria/themes/classic/galleria.classic.min.js');
+
+	/*
 
 	$.ajax({
 		"url" : "gettestJSON",
@@ -149,8 +155,11 @@ var main = function () {
 		}).fail(function (err) {
 			console.log(err);
 		});
+	*/
 
 	Galleria.ready(function(options) {
+
+
 
 		var gallery = this; // galleria is ready and the gallery is assigned
 
@@ -208,7 +217,7 @@ var main = function () {
 	});
 
 
-	Galleria.run('.galleria');
+	Galleria.run('#galleria');
 
 }
 
