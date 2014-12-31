@@ -7,7 +7,7 @@ var //Passport = require("../models/passport.js"),
 
 PictureController.gettestJSON = function(req, res) {
 	var data = [
-	    { image: querystring.escape('Pictures/2014/20140216 - Работа/Photo18.jpg') }
+	    { image: querystring.escape('Pictures/2013/20130216 - Работа/Photo18.jpg') }
 	];
 
 	console.log(data);
@@ -15,9 +15,29 @@ PictureController.gettestJSON = function(req, res) {
 };
 
 PictureController.getCollectionIndex = function(req, res) {
-	var data = [2012,2013,2014];
-	res.json(data);
+	var db = req.db;
+	/*
+	db.pictures.aggregate(
+	   [
+	     {
+	       $group:
+	         {
+	          _id: "$collectionName",
+		      events: { $addToSet:  { eventName: "$eventName"} }
+	         }
+	     }
+	   ]
+	)
+	*/
+//	db.collection('pictures').aggregate([{"$group":{"_id": "$collectionName","events": { "$addToSet":  { "eventName": "$eventName"}}}}],function(err, results) {
+    db.collection('pictures').aggregate([{"$group":{"_id": "$collectionName", "events": { "$addToSet":  { "eventName": "$eventName"}}}}, {"$sort": {"_id": 1	}}],function(err, results) {		
+		console.log(results);
+		res.json(results);
+	});
 };
+
+
+
 
 PictureController.getCollection = function(req, res) {
 	var collectionname = req.params.COLLECTIONNAME;
@@ -28,27 +48,9 @@ PictureController.getCollection = function(req, res) {
 		results.forEach(function(item) {
 			item.fullfileName = querystring.escape(item.fullfileName);
 		});
-		console.log(results);
+		//console.log(results);
 		res.json(results);
 	});
-
-/*
-	db.collection('pictures').insert({'zko':'hi'}, function(err, result) {
-	    if (err) {
-	    	console.log('error');
-	    }
-	    console.log('ok');
-	});
-	
-	var data = [
-	    { image: querystring.escape('Pictures/2014/20140216 - Работа/IMG_0004.JPG') },
-	    { image: querystring.escape('Pictures/2014/20140216 - Работа/IMG_0005.JPG') },
-	    { image: querystring.escape('Pictures/2014/20140216 - Работа/IMG_0173.JPG') }
-	];
-	console.log(data);
-	res.json(data);
-*/
-
 };
 
 

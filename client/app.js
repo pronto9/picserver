@@ -2,9 +2,101 @@ var main = function () {
 	"use strict";
 
 	var orientation_map = {};
+	var collectionIndex;
+	var currentCollection;
+
+	
+
+	$('body').on('click', 'button#home-button', function() {
+		//alert( $(this).text() );
+		$( ".picture-directory" ).empty();
+		drawCollectionIndexRoot();
+	});
+
+	$('body').on('click', 'a.picture-directory-collection', function() {
+		//alert( $(this).text() );
+		$( ".picture-directory" ).empty();
+		drawEventsIndex( $(this).text() );
+	});
+
+	$('body').on('click', 'a.picture-directory-event', function() {
+		//alert( $(this).text() );
+		//$( ".picture-directory" ).empty();
+		//drawEventsIndex( $(this).text() );
+		var currentEventName = $(this).text();
+
+		var url = 'getalbum/' + currentCollection + '/' + currentEventName;
+		//alert(url);
+
+		$.ajax({
+			"url" : url,
+			"type": "GET"
+			}).done(function (responce) {
+				if (responce.length > 0) {
+					var imagedataSource = [];
+					orientation_map = {};
+					//console.log(responce);
+					responce.forEach(function(item) {
+						//console.log(item.fullfileName);
+						imagedataSource.push({image : item.fullfileName, description : String(item.fileName)});
+						orientation_map[item.fullfileName] = item.image.Orientation;
+					});
+					//console.log(orientation_map);
+					//console.log(imagedataSource);
+					Galleria.configure({
+					    thumbnails:'lazy',
+					    transition: 'fade',
+					    dataSource:imagedataSource
+					});
+					Galleria.run('.galleria');
+				}
+			}).fail(function (err) {
+				console.log(err);
+			});
+	});
+
+	var drawCollectionIndexRoot = function () {
+		collectionIndex.forEach(function(item) {
+			var $new_IndexRoot = $("<p>").append($('<a class="picture-directory-collection">').text(item._id));
+			$(".picture-directory").append($new_IndexRoot);
+		});
+	};
+
+	var drawEventsIndex = function (collectionName) {
+		collectionIndex.forEach(function(item) {
+			if ( item._id === collectionName ) {
+				currentCollection = collectionName;
+				item.events.forEach(function(eventName) {
+					//console.log(eventName);
+					var $new_collectionIndex = $("<p>").append($('<a class="picture-directory-event">').text(eventName.eventName));
+					$(".picture-directory").append($new_collectionIndex);
+				});
+			};
+		});
+	};
+
+	
 
 
-	$(".picture-directory a").on('click',function (event) {
+	// Get picture directory
+	$.ajax({
+		"url" : "getCollectionIndex",
+		"type": "GET"
+		}).done(function (responce) {
+			if (responce.length > 0) {
+				collectionIndex = responce;
+				drawCollectionIndexRoot();
+				console.log(responce);
+			}
+		}).fail(function (err) {
+			console.log(err);
+		});
+
+
+
+
+
+	$(".picture-directory-alt a").on('click',function (event) {
 		event.preventDefault();
 		//alert(event.target.id);
 
@@ -80,15 +172,16 @@ var main = function () {
 		});
 
 		$('#rotate-left-button').on('click',function (event) {
-			//console.log($(gallery));
-			//$(gallery.imageTarget).rotate(-90);
-			//console.log(gallery.getActiveImage());
-			//$(gallery.getActiveImage()).rotate(30);
-			//gallery.addElement( $(gallery.getActiveImage()).rotate(30) );
-			//gallery.splice( 0, 1 );
-
-			//gallery.toggleFullscreen(); // toggles the fullscreen
-			//gallery.openLightbox();
+			$.ajax({
+				"url" : "getCollectionIndex",
+				"type": "GET"
+				}).done(function (responce) {
+					if (responce.length > 0) {
+						console.log(responce);
+					}
+				}).fail(function (err) {
+					console.log(err);
+				});
 		});
 
 
@@ -109,12 +202,6 @@ var main = function () {
 				$(e.imageTarget).rotate(180);
 			};
 
-			//$(e.imageTarget).parent().zoom({'on' : 'grab'}).rotate(90);
-
-			//console.log($(e.imageTarget).context.src);
-			//console.log($(e.imageTarget));
-			//console.log(e.imageTarget);
-			//console.log(e);
 		});
 
 		this.lazyLoadChunks(3);
