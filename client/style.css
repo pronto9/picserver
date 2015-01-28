@@ -14,9 +14,17 @@ body {
 	background: #FFFCCC;
 }
 
+.view-area {
+	
+}
+
+#fMap{
+ height: 350px;
+ width: 600px;
+}
 
 
-#galleria { width: auto; height: 600px; background: #000; 
+#galleria { width: auto; height: 900px; background: #000; 
 }
 
 

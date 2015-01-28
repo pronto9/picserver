@@ -1,3 +1,9 @@
 /node_modules
 /client/Pictures
+/client/bower_components
+/client/Pictures
+/client/Thumbnails
+settings.json
+picserver.sublime-project
+picserver.sublime-workspace
 
